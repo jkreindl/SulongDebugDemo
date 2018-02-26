@@ -8,16 +8,24 @@ $base_tokens = {
 }
 
 def parse_tokens(tokens)
+  num_vars = 0
+  vars = Hash.new {|hash, sym|
+    raise "Invalid name: " + sym unless /^[-_.\[\]$@\w]?[_.\[\]$@\w]$/.match? sym
+    num_vars += 1
+    hash[sym] = num_vars - 1
+  }
+  vars.merge!($base_tokens)
+
   peek = lambda do
-    return tokens.empty? ? -1 : tokens.first
+    return tokens.empty? ? -1 : vars[tokens.first]
   end
   poll = lambda do
-    return tokens.empty? ? -1 : tokens.shift
+    return tokens.empty? ? -1 : vars[tokens.shift]
   end
 
   parse = Truffle::Interop.import('@parse')
   node = Truffle::Interop.execute(parse, peek, poll)
-  node
+  [node, vars.invert, num_vars]
 end
 
 def find_solutions(node, num_vars)
@@ -54,23 +62,10 @@ end
 
 def handle_file(file)
   tokens = read_file file
-
-  num_vars = 0
-  vars = Hash.new {|hash, sym|
-    raise "Invalid name: " + sym unless /^[-_.\[\]$@\w]?[_.\[\]$@\w]$/.match? sym
-    num_vars += 1
-    hash[sym] = num_vars - 1
-  }
-  vars.merge!($base_tokens)
-
-  tokens.map! {|sym| vars[sym]}
-
-  fn_node = parse_tokens tokens
+  fn_node, vars, num_vars = parse_tokens tokens
   solutions = find_solutions(fn_node, num_vars)
-  close_node fn_node
-
-  vars = vars.invert
   print_solutions(file, solutions, vars, num_vars)
+  close_node fn_node
 end
 
 if args.empty?
