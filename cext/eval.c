@@ -1,7 +1,6 @@
 #include "boole.h"
 
 typedef int (*Op)(Node *node, long vars);
-
 Op getOp(Kind kind);
 
 int var(Node *node, long vars) {
