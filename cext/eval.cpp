@@ -1,89 +1,55 @@
+/* Evaluate whether an assignment satisfies the formula AST. */
 #include "boole.h"
 
-int eval_VAR(Node *node, long vars);
-int eval_NOT(Node *node, long vars);
-int eval_AND(Node *node, long vars);
-int eval_OR(Node *node, long vars);
-int eval_IMPLIES(Node *node, long vars);
-int eval_EQUALS(Node *node, long vars);
-
-int eval_VAR(Node *node, long vars) {
-    int varId = node->varId;
-    long mask = 0x1 << varId;
-    long value = vars & mask;
-    if (value) {
-        return 1;
-    } else {
-        return 0;
-    }
-}
-
-int eval_NOT(Node *node, long vars) {
-    Node *child = node->lhs;
-    int expr = child->getOp()(child, vars);
-    int res = !expr;
-    return res;
-}
-
-int eval_AND(Node *node, long vars) {
-    Node *child = node->lhs;
-    int lhs = child->getOp()(child, vars);
-    if (!lhs) {
-        return 0;
-    }
-
-    child = node->rhs;
-    int rhs = child->getOp()(child, vars);
-    return rhs;
-}
-
-int eval_OR(Node *node, long vars) {
-    Node *child = node->lhs;
-    int lhs = child->getOp()(child, vars);
-    if (lhs) {
-        return 1;
-    }
-
-    child = node->rhs;
-    int rhs = child->getOp()(child, vars);
-    return rhs;
-}
-
-int eval_IMPLIES(Node *node, long vars) {
-    Node *child = node->lhs;
-    int lhs = child->getOp()(child, vars);
-    if (!lhs) {
-        return 1;
-    }
-
-    child = node->rhs;
-    int rhs = child->getOp()(child, vars);
-    return rhs;
-}
-
-int eval_EQUALS(Node *node, long vars) {
-    Node *child = node->lhs;
-    int lhs = child->getOp()(child, vars);
-
-    child = node->rhs;
-    int rhs = child->getOp()(child, vars);
-
-    int res = rhs == lhs;
-    return res;
-}
-
-Op Node::getOp() {
+int Node::eval(long vars) {
+    int result = 0;
     switch (kind) {
-        case VAR: return &eval_VAR;
-        case AND: return &eval_AND;
-        case OR: return &eval_OR;
-        case NOT: return &eval_NOT;
-        case IMPLIES: return &eval_IMPLIES;
-        case EQUALS: return &eval_EQUALS;
+        case VAR: {
+            const int varId = this->varId;
+            const long mask = 0x1 << varId;
+            const long value = vars & mask;
+            result = value ? 1 : 0;
+            break;
+        }
+        case NOT: {
+            result = this->lhs->eval(vars);
+            result = !result;
+            break;
+        }
+        case AND: {
+            result = this->lhs->eval(vars);
+            if (result) {
+                result = this->rhs->eval(vars);
+            }
+            break;
+        }
+        case OR: {
+            result = this->lhs->eval(vars);
+            if (!result) {
+                result = this->rhs->eval(vars);
+            }
+            break;
+        }
+        case IMPLIES: {
+            result = this->lhs->eval(vars);
+            if (!result) {
+                result = 1;
+            } else {
+                result = this->rhs->eval(vars);
+            }
+            break;
+        }
+        case EQUALS: {
+            const int _lhs = this->lhs->eval(vars);
+            const int _rhs = this->rhs->eval(vars);
+            result = _lhs == _rhs;
+            break;
+        }
     }
+    return result;
 }
 
 int eval(Node *root, long vars) {
-    int res = root->getOp()(root, vars);
+    int res = root->eval(vars);
     return res;
 }

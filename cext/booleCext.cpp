@@ -1,16 +1,21 @@
-extern "C" {
-    #include "ruby.h"
-}
+#include "ruby.h"
 #include "boole.h"
 
 VALUE BooleCext = NULL;
 
-extern "C" void Init_BooleCext();
+/* Ruby method stubs */
+VALUE method_parse(VALUE self, VALUE peek, VALUE pop) {
+    return (VALUE) parse((int (*)()) peek, (int (*)())pop);
+}
+VALUE method_eval(VALUE self, VALUE root, VALUE vars) {
+    return INT2NUM(eval((Node *) root, (long) vars));
+}
+VALUE method_freeTree(VALUE self, VALUE root) {
+    freeTree((Node *) root);
+    return 0;
+}
 
-VALUE method_parse(VALUE self, VALUE peek, VALUE pop);
-VALUE method_eval(VALUE self,  VALUE root, VALUE vars);
-VALUE method_freeTree(VALUE self, VALUE root);
-
+/* setup Ruby module */
 extern "C" void Init_BooleCext() {
     BooleCext = rb_define_module("BooleCext");
 
@@ -28,17 +33,4 @@ extern "C" void Init_BooleCext() {
     rb_define_const(BooleCext, "TOKEN_OR", INT2NUM(TOKEN_OR));
     rb_define_const(BooleCext, "TOKEN_IMPL", INT2NUM(TOKEN_IMPL));
     rb_define_const(BooleCext, "TOKEN_IMPL_REVERSE", INT2NUM(TOKEN_IMPL_REVERSE));
-}
-
-VALUE method_parse(VALUE self, VALUE peek, VALUE pop) {
-    return (VALUE) parse((int (*)()) peek, (int (*)())pop);
-}
-
-VALUE method_eval(VALUE self, VALUE root, VALUE vars) {
-    return INT2NUM(eval((Node *) root, (long) vars));
-}
-
-VALUE method_freeTree(VALUE self, VALUE root) {
-    freeTree((Node *) root);
-    return 0;
 }

@@ -2,13 +2,10 @@
 #define BOOLE_H
 
 /* nodes in the AST of a boole formula */
-enum Kind {
+typedef enum Kind {
     VAR = 0, AND = 1, OR = 2,
     NOT = 3, IMPLIES = 4, EQUALS = 5
-};
-typedef enum Kind Kind;
-class Node;
-typedef int (*Op)(Node *node, long vars);
+} Kind;
 class Node {
 public:
     Kind kind;
@@ -17,7 +14,7 @@ public:
     int varId;
     Node(int _varId) : kind(VAR), lhs(0), rhs(0), varId(_varId) {};
     Node(Kind _kind, Node *_lhs, Node *_rhs) : kind(_kind), lhs(_lhs), rhs(_rhs), varId(-1) {};
-    Op getOp();
+    int eval(long vars);
 };
 
 /* parse a formula into an AST */
