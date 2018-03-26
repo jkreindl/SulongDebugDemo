@@ -1,3 +1,6 @@
+require "./cext/BooleCext.su"
+include BooleCext
+
 args = ARGV.sort
 
 $base_tokens = {
@@ -23,24 +26,21 @@ def parse_tokens(tokens)
     return tokens.empty? ? -1 : vars[tokens.shift]
   end
 
-  parse = Truffle::Interop.import('@parse')
-  node = Truffle::Interop.execute(parse, peek, poll)
+  node = parse(peek, poll);
   [node, vars.invert, num_vars]
 end
 
 def find_solutions(node, num_vars)
-  eval = Truffle::Interop.import('@eval')
   solutions = []
   (1 << num_vars).times do |n|
-    res = Truffle::Interop.execute(eval, node, n)
+    res = eval(node, n);
     solutions << n if res == 1
   end
   solutions
 end
 
 def close_node(node)
-  free_node = Truffle::Interop.import('@freeTree')
-  Truffle::Interop.execute(free_node, node)
+  freeTree(node);
 end
 
 def print_solutions(file, solutions, vars, num_vars)
