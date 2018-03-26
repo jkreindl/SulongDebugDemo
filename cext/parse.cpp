@@ -1,31 +1,13 @@
 #include <stdlib.h>
 #include "boole.h"
 
-/* constants for operator tokens in the boole language */
-const int TOKEN_LPAR = -1;
-const int TOKEN_RPAR = -2;
-const int TOKEN_NOT = -3;
-const int TOKEN_EQUALS = -4;
-const int TOKEN_AND = -5;
-const int TOKEN_OR = -6;
-const int TOKEN_IMPL = -7;
-const int TOKEN_IMPL_REVERSE = -8;
-
 Node *toOpNode(Kind kind, Node *lhs, Node *rhs) {
-    Node *node = (Node *) calloc(1, sizeof(Node));
-    node->kind = kind;
-    node->lhs = lhs;
-    node->rhs = rhs;
-    node->varId = -1;
+    Node *node = new Node(kind, lhs, rhs);
     return node;
 }
 
 Node *toVarNode(int id) {
-    Node *node = (Node *) calloc(1, sizeof(Node));
-    node->kind = VAR;
-    node->lhs = NULL;
-    node->rhs = NULL;
-    node->varId = id;
+    Node *node = new Node(id);
     return node;
 }
 
@@ -154,10 +136,9 @@ Node *parse(int (*peek)(), int (*pop)()) {
 }
 
 void freeTree(Node *root) {
-    if (!root) {
-        return;
+    if (root) {
+        freeTree(root->lhs);
+        freeTree(root->rhs);
+        delete root;
     }
-    freeTree(root->lhs);
-    freeTree(root->rhs);
-    free(root);
 }
