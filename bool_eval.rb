@@ -3,11 +3,17 @@ include BooleCext
 
 # for tokenizing operators
 $base_tokens = {
-  '(' => BooleCext::TOKEN_LPAR, ')' => BooleCext::TOKEN_RPAR,
-  '!' => BooleCext::TOKEN_NOT, '<->' => BooleCext::TOKEN_EQUALS,
-  '&' => BooleCext::TOKEN_AND, '|' => BooleCext::TOKEN_OR,
+  '(' => BooleCext::TOKEN_LPAR, ')' => BooleCext::TOKEN_RPAR, '!' => BooleCext::TOKEN_NOT,
+   '<->' => BooleCext::TOKEN_EQUALS, '&' => BooleCext::TOKEN_AND, '|' => BooleCext::TOKEN_OR,
   '->' => BooleCext::TOKEN_IMPL, '<-' => BooleCext::TOKEN_IMPL_REVERSE
 }
+
+# read the file content and split it into string tokens
+def read_file(file)
+  tokens = File.open(file, 'r').read
+  tokens = tokens.split(/(&|!|\||<->?|->|\(|\))|\s+/) .reject {|elt| elt.empty?}
+  tokens
+end
 
 # parse string tokens into a formula AST
 def parse_tokens(tokens)
@@ -39,28 +45,17 @@ def find_solutions(ast_root, num_vars)
   solutions
 end
 
-# deallocate the formula AST
-def close_node(ast_root)
-  freeTree(ast_root);
-end
-
 # print all assignments that satisfy the formula AST
 def print_solutions(file, solutions, vars, num_vars)
   format = (num_vars - 1).downto(0).to_a.map {|var_id| vars[var_id]}
-  format = format.join(', ')
-  format += " = %0" + num_vars.to_s + "b"
+  format = format.join(', ') +  " = %0" + num_vars.to_s + "b"
   puts 'Solutions for: ' + file
   solutions.each {|sol| puts format % [sol]}
-  puts
-  puts
 end
 
-# read the file content and split it into string tokens
-def read_file(file)
-  tokens = File.open(file, 'r').read
-  tokens = tokens.split(/(&|!|\||<->?|->|\(|\))|\s+/)
-  tokens = tokens.reject {|elt| elt.empty?}
-  tokens
+# deallocate the formula AST
+def close_node(ast_root)
+  freeTree(ast_root);
 end
 
 # parse and evaluate a given *.boole file
@@ -72,7 +67,7 @@ def handle_file(file)
   close_node fn_node
 end
 
-# parse and evaluate all specified files
+# parse and evaluate all specified *.boole files
 raise "Please supply at least one file as input!" if ARGV.empty?
 for file in ARGV.sort
   handle_file file
