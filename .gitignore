@@ -1,3 +1,4 @@
-*.bc
-*.ll
+**/*.bc
+**/*.ll
 
+calc/Makefile
