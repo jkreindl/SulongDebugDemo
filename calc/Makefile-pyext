@@ -1,0 +1,5 @@
+all:
+	clang -std=c++11 -g -c -O1 -emit-llvm -o calc-pyext.bc calc-pyext.cpp
+
+clean:
+	-rm -f *.bc

@@ -1,8 +1,7 @@
 #include "ruby.h"
 #include "calc.cpp"
 
-/* Backing Calculator */
-Calculator *Calc = new Calculator();
+static Calculator *Calc = new Calculator;
 
 /* Ruby method stubs */
 extern "C" VALUE method_pushNumber(VALUE self, int num) {

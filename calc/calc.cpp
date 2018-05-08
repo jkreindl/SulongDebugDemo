@@ -1,5 +1,8 @@
-#include <stdlib.h>
-#include <stdio.h>
+#ifndef CALCULATOR
+#define CALCULATOR
+
+#include <cstdlib>
+#include <cstdio>
 
 /* Entry in the value stack */
 struct StackEntry {
@@ -75,3 +78,5 @@ public:
         return pop();
     };
 };
+
+#endif
