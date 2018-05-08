@@ -1,3 +1,5 @@
+/* A recursive descent parser for the boole language. */
+
 #include <stdlib.h>
 #include "boole.h"
 

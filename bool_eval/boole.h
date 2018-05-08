@@ -1,6 +1,7 @@
 #ifndef BOOLE_H
 #define BOOLE_H
 
+// kind of a node in the boole AST
 typedef enum Kind Kind;
 enum Kind {
     VAR = 0,
@@ -11,6 +12,7 @@ enum Kind {
     EQUALS = 5
 };
 
+// format of a node in the boole AST
 typedef struct Node Node;
 struct Node {
     Kind kind;

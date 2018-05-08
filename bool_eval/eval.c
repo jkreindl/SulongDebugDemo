@@ -1,9 +1,10 @@
+/* Satisfiability checker for assignments to a boole AST. */
 #include "boole.h"
 
 typedef int (*Op)(Node *node, long vars);
-
 Op getOp(Kind kind);
 
+// check the truth value of a variable
 int var(Node *node, long vars) {
     int varId = node->varId;
     long mask = 0x1 << varId;
@@ -69,6 +70,7 @@ int equals(Node *node, long vars) {
     return res;
 }
 
+// return the function for evaluating a node based on its kind
 Op getOp(Kind kind) {
     switch (kind) {
         case VAR: return &var;
