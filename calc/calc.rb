@@ -14,7 +14,7 @@ for operand in ARGV
         CalcExt::doOp(CalcExt::OP_DIV, stack_entry_printer)
     when '='
         puts 'Stack Content (top-down):'
-        CalcExt::doOp(CalcExt::OP_PRINT, stack_entry_printer) # | Point 1 |
+        CalcExt::doOp(CalcExt::OP_PRINT, stack_entry_printer)
     else
         num = Integer(operand)
         CalcExt::pushNumber(num)

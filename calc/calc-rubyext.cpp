@@ -9,9 +9,9 @@ extern "C" VALUE method_pushNumber(VALUE self, int num) {
     return (VALUE) 0;
 }
 extern "C" VALUE method_doOp(VALUE self, Op op, void (*printStackEntry)(int)) { 
-    Calc-> /* | Stepping Point 1 | */
-        doOp(op, printStackEntry); /* | Stepping Point 2 | */
-    return 0; /* | Stepping Point 3 | */
+    Calc->
+        doOp(op, printStackEntry);
+    return 0;
 }
 extern "C" VALUE method_getResult(VALUE self) {
     int result = Calc->getResult();

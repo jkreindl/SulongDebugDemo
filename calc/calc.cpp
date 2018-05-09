@@ -52,7 +52,7 @@ public:
         if (op == PRINT) {
             for (struct StackEntry *entry = this->top; entry ; entry = entry->next) {
                 const int val = entry->num;
-                printStackEntry(val); /* | Inspection Point | */
+                printStackEntry(val);
             }
             return;
         }
