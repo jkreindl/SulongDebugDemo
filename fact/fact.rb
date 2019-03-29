@@ -1,4 +1,4 @@
-require("./FactExt.su")
+require_relative("FactExt")
 include FactExt
 
 (0..12).each do |n|
