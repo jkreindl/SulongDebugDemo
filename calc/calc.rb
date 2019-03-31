@@ -1,4 +1,4 @@
-require "./CalcExt.su"
+require_relative "CalcExt"
 include CalcExt
 
 stack_entry_printer = -> (num){ puts '-> ' + num.to_s }
