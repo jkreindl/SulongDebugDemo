@@ -1,4 +1,4 @@
-OPTS=-g -c -emit-llvm -O1
+OPTS=-g -c -emit-llvm -O0
 
 all:
 	clang $(OPTS) -o tmp_calc.bc calc.c
