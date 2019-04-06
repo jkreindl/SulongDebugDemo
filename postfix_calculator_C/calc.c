@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include <calc.h>
+#include "calc.h"
 
 /* Pop the number from the top of the stack */
 int pop(Calculator * calculator) {
