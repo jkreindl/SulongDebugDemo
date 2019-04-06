@@ -1,5 +1,9 @@
 **/*.bc
 **/*.ll
 **/*.su
+.vscode
+
+run.txt
 
 calc/Makefile
+postfix_calculator_ruby/Makefile
