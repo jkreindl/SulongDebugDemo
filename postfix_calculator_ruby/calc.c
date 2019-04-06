@@ -28,16 +28,8 @@ void push(Calculator * calculator, int num) {
     calculator->top = newEntry;
 };
 
-/* Apply a binary operation to the top two stack elements and push the result,
- * or print the current content of the stack top-down */
-void doOp(Calculator * calculator, Op op, void (*printStackEntry)(int)) {
-    if (op == PRINT) {
-        for (struct StackEntry *entry = calculator->top; entry ; entry = entry->next) {
-            const int val = entry->num;
-            printStackEntry(val);
-        }
-        return;
-    }
+/* Apply a binary operation to the top two stack elements and push the result */
+void doOp(Calculator * calculator, Op op) {
     const int rhs = pop(calculator);
     const int lhs = pop(calculator);
     int result = 0;
@@ -52,7 +44,7 @@ void doOp(Calculator * calculator, Op op, void (*printStackEntry)(int)) {
 };
 
 /* Return the only value on the stack as result */
-int getResult(Calculator * calculator) {
+int getResult(Calculator* calculator) {
     if (calculator->top == 0L || calculator->top->next != 0L) {
         printf("Error: Invalid Expression!\n");
         abort();

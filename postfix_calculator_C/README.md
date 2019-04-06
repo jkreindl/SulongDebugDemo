@@ -4,7 +4,7 @@ This code implements a tool for evaluating simple arithmetic expressions in [pos
 
 ## Usage
 
-The demo takes an arithmetic expression in postfix notation as argument. Valid operands are the following:
+The demo evaluates a hard-coded arithmetic expression in postfix notation. The operands are the following:
 
 * signed integer numbers: these will be pushed onto the internal number stack
 * `+`, `-`, `*`, `/`: these pop the top two values from the internal number stack, perform the operation, and push the result back onto the stack
@@ -22,7 +22,7 @@ This compiles the C extension to LLVM bitcode that Sulong can execute. You can t
 
 You can use the following command to debug the program at source-level using native Sulong, which is available in both the Community Edition and the Enterprise Edition of GraalVM.
 
-    $GRAALVM/bin/lli --llvm.enableLVI=true --llvm.lazyParsing=false --inspect calc.bc 3 4 + =
+    $GRAALVM/bin/lli --llvm.enableLVI=true --llvm.lazyParsing=false --inspect calc.bc 1 2 3 = + +
 
 This will print a URL to the console. Enter that URL into Chrome's address bar to start debugging.
 
@@ -30,7 +30,7 @@ This will print a URL to the console. Enter that URL into Chrome's address bar t
 
 You can use the following command to debug the program at source-level using managed Sulong, which is available only in the Enterprise Edition of GraalVM. Compared to debugging with native Sulong, managed Sulong also enables you to safely inspect the targets of pointer values.
 
-    $GRAALVM/bin/lli --llvm.enableLVI=true --llvm.lazyParsing=false --inspect --llvm.sandboxed=true calc.bc 3 4 + =
+    $GRAALVM/bin/lli --llvm.enableLVI=true --llvm.lazyParsing=false --inspect --llvm.sandboxed=true calc.bc 1 2 3 = + +
 
 This will print a URL to the console. Enter that URL into Chrome's address bar to start debugging.
 
@@ -38,6 +38,6 @@ This will print a URL to the console. Enter that URL into Chrome's address bar t
 
 You can use the following command to debug the program at IR-level using managed Sulong, which is available only in the Enterprise Edition of GraalVM. Compared to debugging with native Sulong, managed Sulong also enables you to safely inspect the targets of pointer values.
 
-    $GRAALVM/bin/lli --llvm.llDebug=true --llvm.lazyParsing=false --inspect --llvm.sandboxed=true calc.bc 3 4 + =
+    $GRAALVM/bin/lli --llvm.llDebug=true --llvm.lazyParsing=false --inspect --llvm.sandboxed=true calc.bc 1 2 3 = + +
 
 This will print a URL to the console. Enter that URL into Chrome's address bar to start debugging.

@@ -8,7 +8,7 @@ struct StackEntry {
 };
 
 /* Supported operations */
-typedef enum Op { UNKNOWN = 0, ADD = 1, SUB = 2, MUL = 3, DIV = 4, PRINT = 5 } Op;
+typedef enum Op { UNKNOWN = 0, ADD = 1, SUB = 2, MUL = 3, DIV = 4 } Op;
 
 /* the calculator */
 typedef struct Calculator {
@@ -18,7 +18,7 @@ typedef struct Calculator {
 /* Supported operations */
 int pop(Calculator * calculator);
 void push(Calculator * calculator, int num);
-void doOp(Calculator * calculator, Op op, void (*printStackEntry)(int));
+void doOp(Calculator * calculator, Op op);
 int getResult(Calculator * calculator);
 
 #endif

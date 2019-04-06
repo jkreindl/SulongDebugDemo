@@ -7,7 +7,7 @@ def parse_number(operand)
 end
 
 def print_stack()
-    stack = CalcExt::doOp(CalcExt::OP_PRINT)
+    stack = CalcExt::getStack()
     puts 'Stack Content (top-down):'
     stack.each { |elt| puts elt.to_s }
 end
