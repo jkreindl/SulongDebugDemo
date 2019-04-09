@@ -4,7 +4,7 @@ This code implements a tool for evaluating simple arithmetic expressions in [pos
 
 ## Usage
 
-The demo evaluates a hard-coded arithmetic expression in postfix notation. The operands are the following:
+The demo evaluates a hard-coded arithmetic expression in postfix notation. The operands are of the following kinds:
 
 * signed integer numbers: these will be pushed onto the internal number stack
 * `+`, `-`, `*`, `/`: these pop the top two values from the internal number stack, perform the operation, and push the result back onto the stack
@@ -12,32 +12,50 @@ The demo evaluates a hard-coded arithmetic expression in postfix notation. The o
 
 ## Getting started
 
-This demo provides a Makefile for compiling the C code to LLVM IR.
+This demo provides a Makefile for compiling the C code to LLVM bitcode that Sulong can execute.
 
     make
 
-This compiles the C extension to LLVM bitcode that Sulong can execute. You can then run the demo and debug the code in the Chrome Devtools.
+You can then run the demo and debug the code in the Chrome Devtools.
 
-### Source-Level Debugging with Native Sulong
+### Source-Level Debugging
 
-You can use the following command to debug the program at source-level using native Sulong, which is available in both the Community Edition and the Enterprise Edition of GraalVM.
+In order to debug the program at source level please make sure that it is compiled with debug information. You can use the provided Makefile to ensure this.
 
-    $GRAALVM/bin/lli --llvm.enableLVI=true --llvm.lazyParsing=false --inspect calc.bc 1 2 3 = + +
+    make clean
+    make
 
-This will print a URL to the console. Enter that URL into Chrome's address bar to start debugging.
+You can then use the following command to debug the program at source-level.
 
-### Source-Level Debugging with Managed Sulong
-
-You can use the following command to debug the program at source-level using managed Sulong, which is available only in the Enterprise Edition of GraalVM. Compared to debugging with native Sulong, managed Sulong also enables you to safely inspect the targets of pointer values.
-
-    $GRAALVM/bin/lli --llvm.enableLVI=true --llvm.lazyParsing=false --inspect --llvm.sandboxed=true calc.bc 1 2 3 = + +
+    $GRAALVM/bin/lli \
+        --experimental-options \
+        --llvm.enableLVI=true \
+        --llvm.lazyParsing=false \
+        --inspect \
+        calc.bc
 
 This will print a URL to the console. Enter that URL into Chrome's address bar to start debugging.
 
 ### IR-Level Debugging with Managed Sulong
 
-You can use the following command to debug the program at IR-level using managed Sulong, which is available only in the Enterprise Edition of GraalVM. Compared to debugging with native Sulong, managed Sulong also enables you to safely inspect the targets of pointer values.
+In order to debug the program at IR-level please make sure that for each executed `.bc`-file there is an appropriate `.ll`-file with the corresponding disassembled bitcode. You can use the provided Makefile to ensure this.
 
-    $GRAALVM/bin/lli --llvm.llDebug=true --llvm.lazyParsing=false --inspect --llvm.sandboxed=true calc.bc 1 2 3 = + +
+    make clean
+    NO_DEBUG=true make
+
+You can use the following command to debug the program at IR-level.
+
+    $GRAALVM/bin/lli
+        --experimental-options \
+        --llvm.llDebug=true \
+        --llvm.lazyParsing=false \
+        --inspect \
+        calc.bc
 
 This will print a URL to the console. Enter that URL into Chrome's address bar to start debugging.
+
+### Sandboxed Mode
+
+In order to be able to dereference arbitrary pointers when debugging you can enable sandboxed mode by adding the `--llvm.sandboxed`. However, this feature is only available in GraalVM Enterprise Edition.
+
+Please note that, due to a bug in Sulong, you currently cannot use sandboxed mode together with the `--llvm.lazyParsing=false` option.
