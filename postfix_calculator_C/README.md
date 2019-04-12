@@ -40,7 +40,7 @@ You can then use the following command to debug the program at source-level.
 
 This will print a URL to the console. Enter that URL into Chrome's address bar to start debugging.
 
-### IR-Level Debugging with Managed Sulong
+### IR-Level Debugging
 
 In order to debug the program at IR-level please make sure that for each executed `.bc`-file there is an appropriate `.ll`-file with the corresponding disassembled bitcode. You can use the provided Makefile to ensure this.
 
