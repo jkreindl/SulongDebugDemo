@@ -2,6 +2,10 @@
 
 This code implements a tool for evaluating simple arithmetic expressions in [postfix notation](https://en.wikipedia.org/wiki/Reverse_Polish_notation). It implements the calculator in C and uses it as C-extension for a ruby program. It is intended to demonstrate cross-language debugging with GraalVM.
 
+## EuroLLVM
+
+This demo was shown at the EuroLLVM 2019 in Brussels, Belgium. All features shown are already available in GraalVM RC15, but some bugfixes will only be available in GraalVM RC16.
+
 ## Usage
 
 The demo takes an arithmetic expression in postfix notation as argument. Valid operands are the following:
